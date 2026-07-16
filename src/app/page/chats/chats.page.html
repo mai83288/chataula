@@ -1,0 +1,242 @@
+<ion-header class="home-header">
+
+  <ion-toolbar>
+
+    <ion-grid class="header-grid">
+
+      <ion-row class="header-row">
+
+        <ion-col size="auto">
+
+          <ion-avatar class="user-avatar">
+
+            <ion-icon
+              name="person-circle-outline"
+              aria-label="Perfil del estudiante">
+            </ion-icon>
+
+          </ion-avatar>
+
+        </ion-col>
+
+        <ion-col>
+
+          <ion-text class="header-title">
+            Salas de chat
+          </ion-text>
+
+          <ion-note class="header-email">
+            alumno@correo.com
+          </ion-note>
+
+        </ion-col>
+
+        <ion-col size="auto">
+
+          <ion-button
+            class="logout-button"
+            fill="clear"
+            aria-label="Cerrar sesión">
+            
+
+            <ion-icon
+              slot="icon-only"
+              name="log-out-outline">
+            </ion-icon>
+
+          </ion-button>
+
+        </ion-col>
+
+      </ion-row>
+
+    </ion-grid>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content class="home-content">
+
+  <ion-grid class="home-shell">
+
+    <!-- Buscador -->
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-searchbar
+          class="room-searchbar"
+          placeholder="Buscar sala"
+          [debounce]="200"
+          [value]="busqueda()"
+          (ionInput)="actualizarBusqueda($event)">
+        </ion-searchbar>
+
+      </ion-col>
+
+    </ion-row>
+
+    <!-- Filtros -->
+
+    <ion-row class="filters-row">
+
+      <ion-col size="12">
+
+        @for (filtro of filtros(); track filtro) {
+
+          <ion-chip
+            class="filter-chip"
+            [class.active-filter]="
+              filtroSeleccionado() === filtro
+            "
+            (click)="seleccionarFiltro(filtro)">
+
+            <ion-label>
+              {{ filtro }}
+            </ion-label>
+
+          </ion-chip>
+
+        }
+
+      </ion-col>
+
+    </ion-row>
+
+    <!-- Lista de chats -->
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-list class="rooms-list">
+
+          @for (
+            chat of chatsFiltrados();
+            track chat.id;
+            let indice = $index
+          ) {
+
+            <ion-card
+              class="room-card"
+              button
+              [style.--room-color]="chat.color"
+              (click)="abrirChat(chat.id)">
+
+              <ion-item lines="none">
+
+                <ion-avatar
+                  slot="start"
+                  class="room-icon"
+                  [style.--room-icon-background]="
+                    chat.fondoIcono
+                  ">
+
+                  <ion-icon
+                    [name]="chat.icono"
+                    [style.color]="chat.color">
+                  </ion-icon>
+
+                </ion-avatar>
+
+                <ion-label>
+
+                  <ion-text class="room-name">
+                    {{ chat.nombre }}
+                  </ion-text>
+
+                  <ion-note class="room-message">
+                    {{ chat.mensaje }}
+                  </ion-note>
+
+                </ion-label>
+
+                <ion-grid
+                  slot="end"
+                  class="room-meta">
+
+                  <ion-row>
+
+                    <ion-col>
+
+                      <ion-note
+                        class="room-time"
+                        [class.unread-time]="
+                          chat.mensajesNoLeidos > 0
+                        ">
+
+                        {{ chat.hora }}
+
+                      </ion-note>
+
+                    </ion-col>
+
+                  </ion-row>
+
+                  @if (chat.mensajesNoLeidos > 0) {
+
+                    <ion-row>
+
+                      <ion-col>
+
+                        <ion-badge class="unread-badge">
+                          {{ chat.mensajesNoLeidos }}
+                        </ion-badge>
+
+                      </ion-col>
+
+                    </ion-row>
+
+                  }
+
+                </ion-grid>
+
+              </ion-item>
+
+            </ion-card>
+
+          } @empty {
+
+            <ion-item
+              class="empty-chat"
+              lines="none">
+
+              <ion-label>
+                No se encontraron salas
+              </ion-label>
+
+            </ion-item>
+
+          }
+
+        </ion-list>
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+  <!-- Botón para crear sala -->
+
+ 
+
+</ion-content>
+
+ <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed">
+
+    <ion-fab-button
+      aria-label="Crear sala"
+      routerLink="/chats/newchat">
+
+      <ion-icon name="add-outline">
+      </ion-icon>
+
+    </ion-fab-button>
+
+  </ion-fab>

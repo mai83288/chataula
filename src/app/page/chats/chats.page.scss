@@ -1,0 +1,327 @@
+:host {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+
+  overflow: hidden;
+}
+
+.home-header {
+  flex: 0 0 auto;
+
+  box-shadow: none;
+}
+
+.home-content {
+  flex: 1 1 auto;
+
+  width: 100%;
+  min-height: 0;
+
+  --background: #f7f8fd;
+}
+
+
+
+.home-header ion-toolbar {
+  --background: #ffffff;
+  --border-width: 0;
+  --min-height: 70px;
+}
+
+.header-grid {
+  width: 100%;
+  padding: 10px 13px 9px;
+}
+
+.header-row {
+  align-items: center;
+}
+
+.header-row ion-col {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #e4eaff;
+}
+
+.user-avatar ion-icon {
+  color: #075bcc;
+  font-size: 26px;
+}
+
+.header-title {
+  display: block;
+
+  color: #075bcc;
+
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.header-email {
+  display: block;
+  margin-top: 1px;
+
+  color: #636b7a;
+
+  font-size: 8px;
+  line-height: 11px;
+}
+
+.logout-button {
+  width: 34px;
+  height: 34px;
+  margin: 0;
+
+  --color: #075bcc;
+  --padding-start: 5px;
+  --padding-end: 5px;
+}
+
+.logout-button ion-icon {
+  font-size: 20px;
+}
+
+.home-content {
+  --background: #f7f8fd;
+}
+
+.home-shell {
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  padding: 11px 12px 100px;
+}
+
+.home-shell > ion-row > ion-col {
+  padding: 0;
+}
+
+.room-searchbar {
+  min-height: 39px;
+  padding: 0;
+
+  --background: #edf2ff;
+  --border-radius: 11px;
+  --box-shadow: none;
+  --cancel-button-color: #075bcc;
+  --clear-button-color: #737c8d;
+  --color: #303747;
+  --icon-color: #697386;
+  --placeholder-color: #70798a;
+  --placeholder-opacity: 1;
+
+  font-size: 12px;
+}
+
+.filters-row {
+  margin-top: 10px;
+}
+
+.filters-row ion-col {
+  display: flex;
+
+  overflow-x: auto;
+  gap: 6px;
+
+  scrollbar-width: none;
+}
+
+.filters-row ion-col::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-chip {
+  min-width: 56px;
+  height: 22px;
+  margin: 0;
+  padding: 0 11px;
+
+  --background: #dde6fb;
+  --color: #50596a;
+
+  justify-content: center;
+
+  border-radius: 13px;
+
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.filter-chip.active-filter {
+  --background: #075bcc;
+  --color: #ffffff;
+
+  box-shadow: 0 3px 7px rgba(7, 91, 204, 0.2);
+}
+
+.rooms-list {
+  margin-top: 18px;
+  padding: 0;
+
+  background: transparent;
+}
+
+.room-card {
+  position: relative;
+
+  width: 100%;
+  margin: 0 0 11px;
+
+  overflow: visible;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  box-shadow: 0 5px 13px rgba(29, 50, 88, 0.08);
+}
+
+.room-card::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 3px;
+
+  border-radius: 10px 0 0 10px;
+
+  background: var(--room-color);
+
+  content: '';
+}
+
+.room-card ion-item {
+  min-height: 59px;
+
+  --background: transparent;
+  --inner-padding-end: 11px;
+  --padding-start: 15px;
+}
+
+.room-icon {
+  width: 36px;
+  height: 36px;
+
+  --border-radius: 6px;
+
+  background: var(--room-icon-background);
+}
+
+.room-icon ion-icon {
+  width: 38px;
+  height: 30px;
+  margin: auto;
+}
+
+.room-name {
+  display: block;
+
+  color: #17253a;
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+}
+
+.room-message {
+  display: block;
+  margin-top: 1px;
+
+  overflow: hidden;
+
+  color: #5b6372;
+
+  font-size: 10px;
+  line-height: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.room-meta {
+  width: 57px;
+  padding: 0;
+
+  text-align: right;
+}
+
+.room-meta ion-row,
+.room-meta ion-col {
+  padding: 0;
+
+  justify-content: flex-end;
+}
+
+.room-time {
+  color: #697184;
+
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.room-time.unread-time {
+  color: #075bcc;
+  font-weight: 700;
+}
+
+.unread-badge {
+  min-width: 17px;
+  height: 15px;
+  margin-top: 7px;
+  padding: 2px 5px;
+
+  --background: #075bcc;
+  --color: #ffffff;
+
+  border-radius: 10px;
+
+  font-size: 8px;
+}
+
+.empty-chat {
+  --background: transparent;
+
+  color: #697184;
+
+  text-align: center;
+
+  font-size: 12px;
+}
+
+.create-room-fab {
+  right: 17px;
+  bottom: 68px;
+}
+
+.create-room-fab ion-fab-button {
+  width: 43px;
+  height: 43px;
+
+  --background: #075bcc;
+  --background-activated: #064ba8;
+  --box-shadow: 0 5px 12px rgba(7, 91, 204, 0.25);
+  --color: #ffffff;
+}
+
+.create-room-fab ion-icon {
+  font-size: 25px;
+}
+
+.home-footer {
+  box-shadow: 0 -2px 9px rgba(33, 48, 77, 0.07);
+}

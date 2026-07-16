@@ -1,0 +1,323 @@
+<ion-content
+  class="login-content"
+  [scrollY]="false">
+
+  <ion-grid class="login-shell">
+
+    <ion-row class="hero-row">
+
+      <ion-col size="12">
+
+        <ion-avatar class="logo-avatar">
+
+          <ion-icon name="chatbox-ellipses-outline">
+          </ion-icon>
+
+        </ion-avatar>
+
+        <ion-text class="hero-title">
+          Chat Aula
+        </ion-text>
+
+        <ion-text class="hero-subtitle">
+          Comunicación en tiempo real para estudiantes
+        </ion-text>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-card class="login-card">
+
+          <ion-card-header>
+
+            <ion-card-title>
+              Bienvenido
+            </ion-card-title>
+
+            <ion-card-subtitle>
+              USA TU CORREO PARA ENTRAR AL CHAT
+            </ion-card-subtitle>
+
+          </ion-card-header>
+
+          <ion-card-content>
+
+            <form
+              [formGroup]="form"
+              (ngSubmit)="iniciarS()">
+
+              <ion-grid class="form-grid">
+
+                <ion-row class="field-label-row">
+
+                  <ion-col>
+
+                    <ion-label class="field-label">
+                      Correo Electrónico
+                    </ion-label>
+
+                  </ion-col>
+
+                </ion-row>
+
+                  <ion-item
+                  class="custom-field"
+                  lines="none"
+                  [class.input-error]="
+                    form.controls.correo.invalid &&
+                    form.controls.correo.touched
+                  ">
+
+                  <ion-icon
+                    slot="start"
+                    name="mail-outline">
+                  </ion-icon>
+
+                  <ion-input
+                    type="email"
+                    inputmode="email"
+                    autocomplete="email"
+                    placeholder="tu@universidad.edu"
+                    formControlName="correo">
+                  </ion-input>
+
+                </ion-item>
+
+                @if (
+                  form.controls.correo.touched &&
+                  form.controls.correo.hasError('required')
+                ) {
+
+                  <ion-note
+                    class="validation-note"
+                    color="danger">
+
+                    Ingresa tu correo electrónico
+
+                  </ion-note>
+
+                }
+
+                @if (
+                  form.controls.correo.touched &&
+                  form.controls.correo.hasError('email')
+                ) {
+
+                  <ion-note
+                    class="validation-note"
+                    color="danger">
+
+                    Ingresa un correo electrónico válido
+
+                  </ion-note>
+
+                }
+
+                <ion-row class="field-label-row password-label-row">
+
+                  <ion-col>
+
+                    <ion-label class="field-label">
+                      Contraseña
+                    </ion-label>
+
+                  </ion-col>
+
+                  <ion-col size="auto">
+
+                    <ion-button
+                      class="forgot-button"
+                      type="button"
+                      fill="clear"
+                      size="small"
+                      (click)="irRecuperarPassword()">
+
+                      ¿Olvidaste tu contraseña?
+
+                    </ion-button>
+
+                  </ion-col>
+
+                </ion-row>
+
+                  <ion-item
+                  class="custom-field"
+                  lines="none"
+                  [class.input-error]="
+                    form.controls.password.invalid &&
+                    form.controls.password.touched
+                  ">
+
+                  <ion-icon
+                    slot="start"
+                    name="lock-closed-outline">
+                  </ion-icon>
+
+                  <ion-input
+                    autocomplete="current-password"
+                    placeholder="••••••••"
+                    formControlName="password"
+                    [type]="mostrarPassword() ? 'text' : 'password'">
+                  </ion-input>
+
+                  <ion-button
+                    class="password-button"
+                    slot="end"
+                    type="button"
+                    fill="clear"
+                    aria-label="Mostrar u ocultar contraseña"
+                    (click)="alternarPassword()">
+
+                    <ion-icon
+                      [name]="
+                        mostrarPassword()
+                          ? 'eye-off-outline'
+                          : 'eye-outline'
+                      ">
+                    </ion-icon>
+
+                  </ion-button>
+
+                </ion-item>
+
+                @if (
+                  form.controls.password.touched &&
+                  form.controls.password.hasError('required')
+                ) {
+
+                  <ion-note
+                    class="validation-note"
+                    color="danger">
+
+                    Ingresa tu contraseña
+
+                  </ion-note>
+
+                }
+
+                @if (
+                  form.controls.password.touched &&
+                  form.controls.password.hasError('minlength')
+                ) {
+
+                  <ion-note
+                    class="validation-note"
+                    color="danger">
+
+                    La contraseña debe tener al menos 8 caracteres
+
+                  </ion-note>
+
+                }
+
+                @if (error()) {
+
+                  <ion-note
+                    class="server-error"
+                    color="danger">
+
+                    {{ error() }}
+
+                  </ion-note>
+
+                }
+
+                <ion-button
+                  class="login-button"
+                  expand="block"
+                  type="submit">
+
+                  Iniciar sesión
+
+                  <ion-icon
+                    slot="end"
+                    name="arrow-forward-outline">
+                  </ion-icon>
+
+                </ion-button>
+
+                <ion-item-divider class="form-divider">
+                </ion-item-divider>
+
+                <ion-text class="account-question">
+                  ¿No tienes una cuenta todavía?
+                </ion-text>
+
+                <ion-button
+                  class="create-account-button"
+                  type="button"
+                  fill="clear"
+                  expand="block"
+                  (click)="irRegistro()">
+
+                  Crear cuenta
+
+                  <ion-icon
+                    slot="end"
+                    name="person-add-outline">
+                  </ion-icon>
+
+                </ion-button>
+
+              </ion-grid>
+
+            </form>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row class="footer-row">
+
+      <ion-col size="12">
+
+        <ion-row class="trust-row">
+
+          <ion-col size="auto">
+
+            <ion-text class="trust-item">
+
+              <ion-icon name="school-outline">
+              </ion-icon>
+
+              Académico
+
+            </ion-text>
+
+          </ion-col>
+
+          <ion-col size="auto">
+
+            <ion-text class="trust-item">
+
+              <ion-icon name="shield-checkmark-outline">
+              </ion-icon>
+
+              Seguro
+
+            </ion-text>
+
+          </ion-col>
+
+        </ion-row>
+
+        <ion-note class="copyright">
+          © 2024 CHAT AULA ECOSYSTEM
+        </ion-note>
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

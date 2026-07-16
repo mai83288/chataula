@@ -1,0 +1,354 @@
+<ion-header class="create-header">
+
+  <ion-toolbar>
+
+    <ion-title class="brand-title">
+
+      <ion-icon name="school-outline">
+      </ion-icon>
+
+      <ion-text>
+        Chat Aula
+      </ion-text>
+
+    </ion-title>
+
+    <ion-buttons slot="end">
+
+      <ion-button
+        fill="clear"
+        aria-label="Cerrar sesión">
+
+        <ion-icon
+          slot="icon-only"
+          name="log-out-outline">
+        </ion-icon>
+
+      </ion-button>
+
+      <ion-avatar class="profile-avatar">
+
+        <ion-icon
+          name="person-circle-outline"
+          aria-label="Perfil">
+        </ion-icon>
+
+      </ion-avatar>
+
+    </ion-buttons>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content class="create-content">
+
+  <ion-grid class="create-shell">
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-back-button
+          class="back-button"
+          defaultHref="/chats"
+          text="Volver">
+        </ion-back-button>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-text class="page-title">
+          Nueva sala
+        </ion-text>
+
+        <ion-note class="page-description">
+          Las salas sirven para organizar conversaciones por tema
+        </ion-note>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-card class="form-card">
+
+          <ion-card-content>
+
+            <form
+              [formGroup]="form"
+              (ngSubmit)="crearSala()">
+
+              <ion-label class="field-label">
+                NOMBRE DE LA SALA
+              </ion-label>
+
+              <ion-item
+                class="custom-field"
+                lines="none"
+                [class.input-error]="
+                  form.controls.nombre.invalid &&
+                  form.controls.nombre.touched
+                ">
+
+                <ion-text slot="start" class="hashtag">
+                  #
+                </ion-text>
+
+                <ion-input
+                  formControlName="nombre"
+                  placeholder="Ej: Álgebra Lineal - Grupo A">
+                </ion-input>
+
+              </ion-item>
+
+              @if (
+                form.controls.nombre.touched &&
+                form.controls.nombre.hasError('required')
+              ) {
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Ingresa el nombre de la sala
+
+                </ion-note>
+              }
+
+              @if (
+                form.controls.nombre.touched &&
+                form.controls.nombre.hasError('minlength')
+              ) {
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  El nombre debe tener al menos 3 caracteres
+
+                </ion-note>
+              }
+
+              <ion-label class="field-label description-label">
+                DESCRIPCIÓN
+              </ion-label>
+
+              <ion-item
+                class="custom-textarea"
+                lines="none"
+                [class.input-error]="
+                  form.controls.descripcion.invalid &&
+                  form.controls.descripcion.touched
+                ">
+
+                <ion-textarea
+                  formControlName="descripcion"
+                  placeholder="¿De qué trata este espacio? Añade detalles para tus compañeros..."
+                  [autoGrow]="false"
+                  [rows]="4">
+                </ion-textarea>
+
+              </ion-item>
+
+              @if (
+                form.controls.descripcion.touched &&
+                form.controls.descripcion.hasError('required')
+              ) {
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Ingresa una descripción
+
+                </ion-note>
+              }
+
+              @if (
+                form.controls.descripcion.touched &&
+                form.controls.descripcion.hasError('minlength')
+              ) {
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  La descripción debe tener al menos 10 caracteres
+
+                </ion-note>
+              }
+
+            </form>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-card class="information-card collaborative-card">
+
+          <ion-card-content>
+
+            <ion-grid>
+
+              <ion-row class="information-row">
+
+                <ion-col size="auto">
+
+                  <ion-avatar class="information-icon collaborative-icon">
+
+                    <ion-icon name="people-outline">
+                    </ion-icon>
+
+                  </ion-avatar>
+
+                </ion-col>
+
+                <ion-col>
+
+                  <ion-text class="information-title collaborative-title">
+                    Colaborativo
+                  </ion-text>
+
+                  <ion-note class="information-description">
+                    Cualquier estudiante del aula podrá unirse.
+                  </ion-note>
+
+                </ion-col>
+
+              </ion-row>
+
+            </ion-grid>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-card class="information-card organized-card">
+
+          <ion-card-content>
+
+            <ion-grid>
+
+              <ion-row class="information-row">
+
+                <ion-col size="auto">
+
+                  <ion-avatar class="information-icon organized-icon">
+
+                    <ion-icon name="checkmark-done-circle-outline">
+                    </ion-icon>
+
+                  </ion-avatar>
+
+                </ion-col>
+
+                <ion-col>
+
+                  <ion-text class="information-title organized-title">
+                    Organizado
+                  </ion-text>
+
+                  <ion-note class="information-description">
+                    Categoriza tus hilos de estudio fácilmente.
+                  </ion-note>
+
+                </ion-col>
+
+              </ion-row>
+
+            </ion-grid>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+    @if (error()) {
+
+      <ion-row>
+
+        <ion-col size="12">
+
+          <ion-note
+            class="server-error"
+            color="danger">
+
+            {{ error() }}
+
+          </ion-note>
+
+        </ion-col>
+
+      </ion-row>
+
+    }
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-button
+          class="create-button"
+          expand="block"
+          type="button"
+          (click)="crearSala()">
+
+          <ion-icon
+            slot="start"
+            name="add-circle-outline">
+          </ion-icon>
+
+          Crear sala
+
+        </ion-button>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-button
+          class="cancel-button"
+          expand="block"
+          fill="outline"
+          type="button"
+          (click)="cancelar()">
+
+          Cancelar
+
+        </ion-button>
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

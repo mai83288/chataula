@@ -1,0 +1,352 @@
+<ion-content
+  class="register-content"
+  >
+
+  <ion-grid class="register-shell">
+
+    <ion-row class="hero-row">
+
+      <ion-col size="12">
+
+        <ion-avatar class="logo-avatar">
+
+          <ion-icon name="school">
+          </ion-icon>
+
+        </ion-avatar>
+
+        <ion-text class="hero-title">
+          Chat Aula
+        </ion-text>
+
+        <ion-text class="hero-subtitle">
+          Tu red de estudio colaborativa
+        </ion-text>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-card class="register-card">
+
+          <ion-card-header>
+
+            <ion-card-title>
+              Crear cuenta
+            </ion-card-title>
+
+          </ion-card-header>
+
+          <ion-card-content>
+
+            <form
+              [formGroup]="form"
+              (ngSubmit)="registrar()">
+
+              <ion-label class="field-label">
+                Email
+              </ion-label>
+
+              <ion-item
+                class="custom-field"
+                lines="none"
+                [class.input-error]="
+                  form.controls.correo.invalid &&
+                  form.controls.correo.touched
+                ">
+
+                <ion-icon
+                  slot="start"
+                  name="mail-outline">
+                </ion-icon>
+
+                <ion-input
+                  type="email"
+                  inputmode="email"
+                  autocomplete="email"
+                  placeholder="tu@universidad.edu"
+                  formControlName="correo">
+                </ion-input>
+
+              </ion-item>
+
+              @if (
+                form.controls.correo.touched &&
+                form.controls.correo.hasError('required')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Ingresa tu correo electrónico
+
+                </ion-note>
+
+              }
+
+              @if (
+                form.controls.correo.touched &&
+                form.controls.correo.hasError('email')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Ingresa un correo electrónico válido
+
+                </ion-note>
+
+              }
+
+              <ion-label class="field-label password-label">
+                Contraseña
+              </ion-label>
+
+              <ion-item
+                class="custom-field"
+                lines="none"
+                [class.input-error]="
+                  form.controls.password.invalid &&
+                  form.controls.password.touched
+                ">
+
+                <ion-icon
+                  slot="start"
+                  name="lock-closed-outline">
+                </ion-icon>
+
+                <ion-input
+                  type="password"
+                  autocomplete="new-password"
+                  placeholder="••••••••"
+                  formControlName="password">
+                </ion-input>
+
+              </ion-item>
+
+              @if (
+                form.controls.password.touched &&
+                form.controls.password.hasError('required')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Ingresa una contraseña
+
+                </ion-note>
+
+              }
+
+              @if (
+                form.controls.password.touched &&
+                form.controls.password.hasError('minlength')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  La contraseña debe tener al menos 8 caracteres
+
+                </ion-note>
+
+              }
+
+              <ion-label class="field-label password-label">
+                Confirmar contraseña
+              </ion-label>
+
+              <ion-item
+                class="custom-field"
+                lines="none"
+                [class.input-error]="
+                  form.controls.confirmarPassword.touched &&
+                  (
+                    form.controls.confirmarPassword.invalid ||
+                    form.hasError('passwordsDiferentes')
+                  )
+                ">
+
+                <ion-icon
+                  slot="start"
+                  name="shield-checkmark-outline">
+                </ion-icon>
+
+                <ion-input
+                  type="password"
+                  autocomplete="new-password"
+                  placeholder="••••••••"
+                  formControlName="confirmarPassword">
+                </ion-input>
+
+              </ion-item>
+
+              @if (
+                form.controls.confirmarPassword.touched &&
+                form.controls.confirmarPassword.hasError('required')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Confirma tu contraseña
+
+                </ion-note>
+
+              }
+
+              @if (
+                form.controls.confirmarPassword.touched &&
+                form.hasError('passwordsDiferentes')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Las contraseñas no coinciden
+
+                </ion-note>
+
+              }
+
+              @if (error()) {
+
+                <ion-note
+                  class="server-error"
+                  color="danger">
+
+                  {{ error() }}
+
+                </ion-note>
+
+              }
+
+              <ion-button
+                class="register-button"
+                expand="block"
+                type="submit">
+
+                Registrarme
+
+                <ion-icon
+                  slot="end"
+                  name="arrow-forward-outline">
+                </ion-icon>
+
+              </ion-button>
+
+              <ion-row class="social-divider-row">
+
+                <ion-col>
+
+                  <ion-item-divider class="social-divider">
+                  </ion-item-divider>
+
+                </ion-col>
+
+                <ion-col size="auto">
+
+                  <ion-text class="social-divider-text">
+                    o regístrate con
+                  </ion-text>
+
+                </ion-col>
+
+                <ion-col>
+
+                  <ion-item-divider class="social-divider">
+                  </ion-item-divider>
+
+                </ion-col>
+
+              </ion-row>
+
+              <ion-row class="social-buttons-row">
+
+                <ion-col size="6">
+
+                  <ion-button
+                    class="social-button"
+                    expand="block"
+                    fill="outline"
+                    type="button"
+                    (click)="registrarGoogle()">
+
+                    <ion-icon
+                      slot="start"
+                      name="logo-google">
+                    </ion-icon>
+
+                    Google
+
+                  </ion-button>
+
+                </ion-col>
+
+                <ion-col size="6">
+
+                  <ion-button
+                    class="social-button"
+                    expand="block"
+                    fill="outline"
+                    type="button"
+                    (click)="registrarMicrosoft()">
+
+                    <ion-icon
+                      slot="start"
+                      name="logo-windows">
+                    </ion-icon>
+
+                    Microsoft
+
+                  </ion-button>
+
+                </ion-col>
+
+              </ion-row>
+
+            </form>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row class="login-footer-row">
+
+      <ion-col size="12">
+
+        <ion-text class="login-question">
+          ¿Ya tengo cuenta?
+        </ion-text>
+
+        <ion-button
+          class="login-link"
+          type="button"
+          fill="clear"
+          (click)="irInicioSesion()">
+
+          Ya tengo cuenta
+
+        </ion-button>
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

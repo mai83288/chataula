@@ -1,0 +1,181 @@
+<ion-header class="chat-header">
+
+  <ion-toolbar>
+
+    <ion-buttons slot="start">
+
+      <ion-back-button
+        defaultHref="/chats"
+        text="">
+      </ion-back-button>
+
+    </ion-buttons>
+
+    <ion-title class="chat-title" (click)="verInformacionSala()">
+
+      <ion-text class="room-title">
+        {{ nombreSala() }}
+      </ion-text>
+
+      @if (estadoSala()) {
+
+        <ion-note class="room-status">
+
+          <ion-text class="status-dot">
+            ●
+          </ion-text>
+
+          {{ estadoSala() }}
+
+        </ion-note>
+
+      }
+
+    </ion-title>
+
+    <ion-buttons slot="end">
+
+      <ion-avatar class="room-avatar">
+
+        <ion-icon
+          name="person-circle-outline"
+          aria-label="Perfil">
+        </ion-icon>
+
+      </ion-avatar>
+
+    </ion-buttons>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content class="chat-content">
+
+  <ion-list class="messages-list">
+
+    @for (
+      mensaje of mensajes();
+      track mensaje.id
+    ) {
+
+      <ion-item
+        class="message-item"
+        [class.own-message]="mensaje.esMio"
+        [class.other-message]="!mensaje.esMio"
+        [style.--message-accent]="
+          mensaje.colorBorde || 'transparent'
+        "
+        lines="none">
+
+        <ion-grid class="message-grid">
+
+          @if (!mensaje.esMio && mensaje.autor) {
+
+            <ion-row>
+
+              <ion-col class="sender-column">
+
+                <ion-text class="sender-name">
+                  {{ mensaje.autor }}
+                </ion-text>
+
+              </ion-col>
+
+            </ion-row>
+
+          }
+
+          <ion-row
+            class="bubble-row"
+            [class.own-bubble-row]="mensaje.esMio">
+
+            <ion-col
+              class="bubble-column"
+              size="auto">
+
+              <ion-card class="message-bubble">
+
+                <ion-card-content>
+
+                  <ion-text>
+                    {{ mensaje.contenido }}
+                  </ion-text>
+
+                </ion-card-content>
+
+              </ion-card>
+
+            </ion-col>
+
+          </ion-row>
+
+          @if (mensaje.hora) {
+
+            <ion-row
+              class="time-row"
+              [class.own-time-row]="mensaje.esMio">
+
+              <ion-col size="auto">
+
+                <ion-note class="message-time">
+                  {{ mensaje.hora }}
+                </ion-note>
+
+              </ion-col>
+
+            </ion-row>
+
+          }
+
+        </ion-grid>
+
+      </ion-item>
+
+    }
+
+  </ion-list>
+
+  
+  
+
+</ion-content>
+
+<ion-footer class="composer-footer">
+
+  <ion-toolbar>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="enviarMensaje()">
+
+      <ion-item
+        class="message-composer"
+        lines="none">
+
+        <ion-input
+          formControlName="texto"
+          aria-label="Escribir mensaje">
+        </ion-input>
+
+        <ion-button
+          class="send-button"
+          slot="end"
+          type="submit"
+          fill="clear"
+          [disabled]="form.invalid">
+
+          <ion-icon
+            slot="icon-only"
+            name="send-outline">
+          </ion-icon>
+
+        </ion-button>
+
+      </ion-item>
+
+    </form>
+
+  </ion-toolbar>
+
+</ion-footer>

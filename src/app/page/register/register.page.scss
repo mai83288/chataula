@@ -1,0 +1,299 @@
+:host {
+  display: block;
+}
+
+.register-content {
+  --background:
+    linear-gradient(
+      180deg,
+      #edf2ff 0%,
+      #f8faff 42%,
+      #edfff9 74%,
+      #f8fbff 100%
+    );
+}
+
+.register-shell {
+  width: 100%;
+  max-width: 328px;
+  margin: 0 auto;
+  padding:
+    calc(48px + env(safe-area-inset-top))
+    13px
+    24px;
+}
+
+.hero-row {
+  text-align: center;
+}
+
+.logo-avatar {
+  width: 49px;
+  height: 49px;
+  margin: 0 auto;
+
+  --border-radius: 10px;
+
+  background: #286bed;
+
+  box-shadow:
+    0 7px 13px rgba(39, 103, 226, 0.24);
+}
+
+.logo-avatar ion-icon {
+  width: 27px;
+  height: 27px;
+  margin: auto;
+
+  color: #ffffff;
+}
+
+.hero-title {
+  display: block;
+  margin-top: 10px;
+
+  color: #0756c5;
+
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+.hero-subtitle {
+  display: block;
+  margin-top: 3px;
+
+  color: #444b59;
+
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.register-card {
+  width: 100%;
+  margin: 21px 0 0;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 9px 18px rgba(29, 66, 91, 0.14);
+}
+
+ion-card-header {
+  padding: 20px 20px 9px;
+}
+
+ion-card-title {
+  color: #1d2939;
+
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 21px;
+}
+
+ion-card-content {
+  padding: 7px 20px 19px;
+}
+
+.field-label {
+  display: block;
+
+  margin-top: 2px;
+  margin-bottom: 4px;
+
+  color: #586071;
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.password-label {
+  margin-top: 12px;
+}
+
+.custom-field {
+  min-height: 38px;
+
+  --background: #ffffff;
+  --border-radius: 6px;
+  --inner-border-width: 0;
+  --padding-start: 10px;
+  --inner-padding-end: 8px;
+
+  border: 1px solid #cbd3e1;
+  border-radius: 6px;
+
+  box-shadow: none;
+}
+
+.custom-field ion-icon {
+  color: #737c8d;
+
+  font-size: 17px;
+}
+
+.custom-field ion-input {
+  --color: #303747;
+  --placeholder-color: #6f7786;
+  --placeholder-opacity: 1;
+
+  min-height: 36px;
+
+  font-size: 13px;
+}
+
+.custom-field.input-error {
+  border-color: var(--ion-color-danger);
+}
+
+.validation-note {
+  display: block;
+
+  margin-top: 4px;
+
+  font-size: 10px;
+}
+
+.server-error {
+  display: block;
+
+  margin-top: 10px;
+
+  text-align: center;
+
+  font-size: 11px;
+}
+
+.register-button {
+  height: 47px;
+  margin-top: 24px;
+
+  --background: #075bcc;
+  --background-activated: #064ba8;
+  --border-radius: 6px;
+  --box-shadow: none;
+
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.register-button ion-icon {
+  font-size: 19px;
+}
+
+.social-divider-row {
+  margin-top: 13px;
+
+  align-items: center;
+}
+
+.social-divider-row ion-col {
+  padding: 0;
+}
+
+.social-divider {
+  min-height: 1px;
+  height: 1px;
+
+  --background: #d5dbe5;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.social-divider-text {
+  display: block;
+
+  padding: 0 8px;
+
+  color: #5f6674;
+
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.social-buttons-row {
+  margin-top: 11px;
+}
+
+.social-buttons-row ion-col {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.social-buttons-row ion-col:first-child {
+  padding-left: 0;
+  padding-right: 4px;
+}
+
+.social-buttons-row ion-col:last-child {
+  padding-left: 4px;
+  padding-right: 0;
+}
+
+.social-button {
+  height: 36px;
+  margin: 0;
+
+  --border-color: #cbd3e1;
+  --border-radius: 6px;
+  --border-width: 1px;
+  --color: #273142;
+  --padding-start: 8px;
+  --padding-end: 8px;
+
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+.social-button ion-icon {
+  font-size: 14px;
+}
+
+.login-footer-row {
+  margin-top: 11px;
+
+  text-align: center;
+}
+
+.login-footer-row ion-col {
+  padding: 0;
+}
+
+.login-question {
+  color: #3f4653;
+
+  font-size: 10px;
+}
+
+.login-link {
+  min-height: 27px;
+  margin: 0;
+
+  --color: #075bcc;
+  --padding-start: 4px;
+  --padding-end: 4px;
+
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: none;
+}
+
+@media (max-height: 700px) {
+  .register-shell {
+    padding-top: 25px;
+  }
+
+  .register-card {
+    margin-top: 15px;
+  }
+
+  .register-button {
+    margin-top: 17px;
+  }
+}

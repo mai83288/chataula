@@ -1,0 +1,246 @@
+<ion-header class="profile-header">
+
+  <ion-toolbar>
+
+    <ion-avatar
+      slot="start"
+      class="header-avatar">
+
+      <ion-icon
+        name="person-circle-outline"
+        aria-label="Perfil">
+      </ion-icon>
+
+    </ion-avatar>
+
+    <ion-title class="brand-title">
+      Chat Aula
+    </ion-title>
+
+    <ion-buttons slot="end">
+
+      <ion-button
+        fill="clear"
+        aria-label="Cerrar sesión"
+        (click)="cerrarSesion()">
+
+        <ion-icon
+          slot="icon-only"
+          name="log-out-outline">
+        </ion-icon>
+
+      </ion-button>
+
+    </ion-buttons>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content class="profile-content">
+
+  <ion-grid class="profile-shell">
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-text class="page-title">
+          Mi cuenta
+        </ion-text>
+
+        <ion-note class="page-description">
+          Gestiona tus preferencias de estudiante y seguridad
+          de la cuenta.
+        </ion-note>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-card class="information-card email-card">
+
+          <ion-card-content>
+
+            <ion-grid>
+
+              <ion-row>
+
+                <ion-col size="auto">
+
+                  <ion-icon
+                    class="information-icon email-icon"
+                    name="mail">
+                  </ion-icon>
+
+                </ion-col>
+
+                <ion-col>
+
+                  <ion-note class="information-label">
+                    CORREO INSTITUCIONAL
+                  </ion-note>
+
+                  <ion-text class="information-value">
+                    {{ correo() }}
+                  </ion-text>
+
+                </ion-col>
+
+              </ion-row>
+
+            </ion-grid>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-card class="information-card security-card">
+
+          <ion-card-content>
+
+            <ion-grid>
+
+              <ion-row>
+
+                <ion-col size="auto">
+
+                  <ion-icon
+                    class="information-icon security-icon"
+                    name="shield-checkmark">
+                  </ion-icon>
+
+                </ion-col>
+
+                <ion-col>
+
+                  <ion-note class="information-label">
+                    SEGURIDAD
+                  </ion-note>
+
+                  <ion-text class="security-description">
+                    {{ seguridad() }}
+                  </ion-text>
+
+                  <ion-text class="security-status">
+
+                    <ion-icon name="checkmark-circle">
+                    </ion-icon>
+
+                    Protección activa
+
+                  </ion-text>
+
+                </ion-col>
+
+              </ion-row>
+
+            </ion-grid>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-card class="welcome-card">
+
+          <ion-card-content>
+
+            <ion-grid>
+
+              <ion-row class="welcome-row">
+
+                <ion-col>
+
+                  <ion-text class="welcome-title">
+                    Bienvenido de nuevo
+                  </ion-text>
+
+                  <ion-note class="welcome-description">
+                    Tu historial académico y chats de estudio
+                    están sincronizados en todos tus dispositivos.
+                  </ion-note>
+
+                </ion-col>
+
+                <ion-col
+                  size="auto"
+                  class="welcome-icon-column">
+
+                  <ion-icon
+                    class="welcome-icon"
+                    name="school-outline">
+                  </ion-icon>
+
+                </ion-col>
+
+              </ion-row>
+
+            </ion-grid>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-button
+          class="logout-button"
+          expand="block"
+          fill="outline"
+          type="button"
+          (click)="cerrarSesion()">
+
+          <ion-icon
+            slot="start"
+            name="power-outline">
+          </ion-icon>
+
+          Cerrar sesión
+
+        </ion-button>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="12">
+
+        <ion-note class="version-text">
+          {{ version() }}
+        </ion-note>
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

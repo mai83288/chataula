@@ -1,0 +1,453 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.info-header {
+  box-shadow: none;
+}
+
+.info-header ion-toolbar {
+  --background: #ffffff;
+  --border-color: #e8edf5;
+  --border-width: 0 0 1px 0;
+  --min-height: 56px;
+  --padding-start: 3px;
+  --padding-end: 8px;
+}
+
+.info-header ion-buttons {
+  min-width: 40px;
+}
+
+.info-header ion-back-button {
+  --color: #075bcc;
+  --icon-font-size: 20px;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.info-header ion-title {
+  padding: 0 5px;
+
+  color: #075bcc;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-align: left;
+}
+
+.profile-button {
+  width: 36px;
+  height: 36px;
+  margin: 0;
+
+  --color: #075bcc;
+  --padding-start: 4px;
+  --padding-end: 4px;
+}
+
+.profile-button ion-icon {
+  font-size: 29px;
+}
+
+/* Portada de la sala */
+
+.cover-card {
+  position: relative;
+
+  width: 100%;
+  min-height: 112px;
+  margin: 0;
+
+  overflow: hidden;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #075bcc 0%,
+      #286bed 58%,
+      #55a8f5 100%
+    );
+
+  box-shadow:
+    0 8px 18px rgba(7, 91, 204, 0.2);
+}
+
+.cover-card::before {
+  position: absolute;
+  top: -42px;
+  right: -30px;
+
+  width: 120px;
+  height: 120px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.1);
+
+  content: '';
+}
+
+.cover-card::after {
+  position: absolute;
+  right: 45px;
+  bottom: -47px;
+
+  width: 95px;
+  height: 95px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.07);
+
+  content: '';
+}
+
+.cover-card ion-card-content {
+  position: relative;
+  z-index: 1;
+
+  padding: 21px 18px;
+}
+
+.cover-grid,
+.cover-grid ion-row,
+.cover-grid ion-col {
+  padding: 0;
+}
+
+.cover-row {
+  min-height: 70px;
+
+  align-items: center;
+}
+
+.cover-icon {
+  width: 48px;
+  height: 48px;
+  margin-right: 13px;
+
+  display: flex;
+
+  --border-radius: 13px;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  background: rgba(255, 255, 255, 0.16);
+
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-icon ion-icon {
+  color: #ffffff;
+
+  font-size: 26px;
+}
+
+.cover-category {
+  display: block;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  line-height: 10px;
+}
+
+.cover-title {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 22px;
+}
+
+.cover-creator {
+  display: block;
+
+  margin-top: 4px;
+
+  color: rgba(255, 255, 255, 0.86);
+
+  font-size: 8px;
+  line-height: 11px;
+}
+
+
+.detail-card {
+  position: relative;
+
+  width: 100%;
+  margin: 13px 0 0;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 11px rgba(29, 50, 88, 0.08);
+}
+
+.detail-card ion-card-content {
+  padding: 13px 12px;
+}
+
+.section-title {
+  display: flex;
+
+  font-size: 7px;
+  font-weight: 700;
+  line-height: 10px;
+
+  align-items: center;
+  gap: 4px;
+}
+
+.section-title ion-icon {
+  font-size: 11px;
+}
+
+.description-title {
+  color: #075bcc;
+}
+
+.description-text {
+  display: block;
+
+  margin-top: 9px;
+
+  color: #303747;
+
+  font-size: 9px;
+  line-height: 13px;
+}
+
+.activity-card::before,
+.date-card::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 3px;
+
+  border-radius: 7px 0 0 7px;
+
+  content: '';
+}
+
+.activity-card::before {
+  background: #008466;
+}
+
+.date-card::before {
+  background: #cb4c0b;
+}
+
+.activity-title {
+  color: #008466;
+}
+
+.messages-total {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #17253a;
+
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 25px;
+}
+
+.messages-label {
+  display: block;
+
+  margin-top: 1px;
+
+  color: #697184;
+
+  font-size: 7px;
+  line-height: 10px;
+}
+
+.popularity-progress {
+  height: 1px;
+  margin-top: 10px;
+
+  --background: #dbe1eb;
+  --progress-background: #008466;
+}
+
+.popularity-grid {
+  padding: 7px 0 0;
+}
+
+.popularity-grid ion-row,
+.popularity-grid ion-col {
+  padding: 0;
+}
+
+.popularity-label {
+  color: #697184;
+
+  font-size: 7px;
+  font-weight: 600;
+}
+
+.popularity-value {
+  color: #008466;
+
+  font-size: 7px;
+  font-weight: 700;
+}
+
+.date-title {
+  color: #cb4c0b;
+}
+
+.creation-date {
+  display: block;
+
+  margin-top: 8px;
+
+  color: #303747;
+
+  font-size: 9px;
+  line-height: 13px;
+}
+
+.school-cycle {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #697184;
+
+  font-size: 8px;
+  font-style: italic;
+  line-height: 11px;
+}
+
+.administrator-card {
+  width: 100%;
+  margin: 13px 0 0;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 11px rgba(29, 50, 88, 0.08);
+}
+
+.administrator-card ion-card-content {
+  padding: 11px;
+}
+
+.administrator-card ion-grid,
+.administrator-card ion-row,
+.administrator-card ion-col {
+  padding: 0;
+}
+
+.administrator-row {
+  align-items: center;
+}
+
+.administrator-avatar {
+  width: 31px;
+  height: 31px;
+  margin-right: 8px;
+
+  display: flex;
+
+  --border-radius: 50%;
+
+  border: 1px solid #a9c7ff;
+
+  background: #e5efff;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.administrator-avatar ion-icon {
+  color: #075bcc;
+
+  font-size: 17px;
+}
+
+.administrator-name {
+  display: block;
+
+  color: #263144;
+
+  font-size: 9px;
+  line-height: 12px;
+}
+
+.administrator-role {
+  display: block;
+
+  max-width: 75px;
+  margin-top: 1px;
+
+  color: #697184;
+
+  font-size: 7px;
+  line-height: 10px;
+}
+
+.contact-button {
+  height: 27px;
+  margin: 0;
+
+  --background: #e5efff;
+  --border-radius: 5px;
+  --box-shadow: none;
+  --color: #075bcc;
+  --padding-end: 8px;
+  --padding-start: 8px;
+
+  font-size: 8px;
+  text-transform: none;
+}
+
+.contact-button ion-icon {
+  font-size: 11px;
+}
+
+.back-chat-button {
+  height: 31px;
+  margin: 24px auto 0;
+
+  display: block;
+
+  --background: #075bcc;
+  --border-radius: 6px;
+  --box-shadow:
+    0 4px 8px rgba(7, 91, 204, 0.2);
+  --color: #ffffff;
+  --padding-end: 14px;
+  --padding-start: 14px;
+
+  font-size: 8px;
+  text-transform: none;
+}
+
+.back-chat-button ion-icon {
+  font-size: 12px;
+}
