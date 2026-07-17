@@ -22,6 +22,7 @@
       <ion-button
         fill="clear"
         aria-label="Cerrar sesión"
+        [disabled]="cerrandoSesion()"
         (click)="cerrarSesion()">
 
         <ion-icon
@@ -214,6 +215,7 @@
           expand="block"
           fill="outline"
           type="button"
+          [disabled]="cerrandoSesion()"
           (click)="cerrarSesion()">
 
           <ion-icon
@@ -221,7 +223,11 @@
             name="power-outline">
           </ion-icon>
 
-          Cerrar sesión
+          @if (cerrandoSesion()) {
+            Cerrando sesión...
+          } @else {
+            Cerrar sesión
+          }
 
         </ion-button>
 

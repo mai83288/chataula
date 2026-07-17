@@ -20,7 +20,10 @@ import {
   DocumentData,
   collection,
   doc,
-  onSnapshot
+  onSnapshot,
+  getDoc,
+  serverTimestamp,
+  addDoc
 } from 'firebase/firestore';
 
 export type FiltroChat =
@@ -28,6 +31,20 @@ export type FiltroChat =
   | 'Académicas'
   | 'Social'
   | 'Urgente';
+
+  export type CategoriaSala =
+  Exclude<FiltroChat, 'Todas'>;
+
+  export interface DatosNuevaSala {
+    nombre: string;
+    descripcion: string;
+    categoria: CategoriaSala;
+  }
+
+  export interface ResultadoSalaCreada {
+    aulaId: string;
+    salaId: string;
+  }
 
 export interface ChatSala {
   id: string;
@@ -427,5 +444,151 @@ export class SalasService {
         year: 'numeric'
       }
     ).format(fecha);
+  }
+
+  async crearSala(
+    datos: DatosNuevaSala
+  ): Promise<ResultadoSalaCreada> {
+
+    const usuario =
+      this.auth.currentUser;
+
+    if (!usuario) {
+      throw new Error(
+        'Debes iniciar sesión para crear una sala.'
+      );
+    }
+
+    const referenciaPerfil = doc(
+      this.firestore,
+      'usuarios',
+      usuario.uid
+    );
+
+    const documentoPerfil =
+      await getDoc(referenciaPerfil);
+
+    if (!documentoPerfil.exists()) {
+      throw new Error(
+        'No se encontró tu perfil de usuario.'
+      );
+    }
+
+    const perfil =
+      documentoPerfil.data();
+
+    const aulaActualId =
+      perfil['aulaActualId'];
+
+    if (
+      typeof aulaActualId !== 'string' ||
+      aulaActualId.trim().length === 0
+    ) {
+      throw new Error(
+        'Tu cuenta todavía no está asociada a un aula.'
+      );
+    }
+
+    const aulaId =
+      aulaActualId.trim();
+
+    const nombre =
+      datos.nombre.trim();
+
+    const descripcion =
+      datos.descripcion.trim();
+
+    if (
+      nombre.length < 3 ||
+      nombre.length > 100
+    ) {
+      throw new Error(
+        'El nombre debe tener entre 3 y 100 caracteres.'
+      );
+    }
+
+    if (
+      descripcion.length < 10 ||
+      descripcion.length > 1000
+    ) {
+      throw new Error(
+        'La descripción debe tener entre 10 y 1000 caracteres.'
+      );
+    }
+
+    const categoriasPermitidas:
+      CategoriaSala[] = [
+        'Académicas',
+        'Social',
+        'Urgente'
+      ];
+
+    if (
+      !categoriasPermitidas.includes(
+        datos.categoria
+      )
+    ) {
+      throw new Error(
+        'Selecciona una categoría válida.'
+      );
+    }
+
+    const nombreCompleto =
+      (
+        typeof perfil['nombreCompleto'] === 'string'
+          ? perfil['nombreCompleto'].trim()
+          : ''
+      ) ||
+      [
+        typeof perfil['nombre'] === 'string'
+          ? perfil['nombre'].trim()
+          : '',
+
+        typeof perfil['apellidos'] === 'string'
+          ? perfil['apellidos'].trim()
+          : ''
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .trim() ||
+      usuario.displayName?.trim() ||
+      usuario.email ||
+      'Estudiante';
+
+    const referenciaSalas = collection(
+      this.firestore,
+      'aulas',
+      aulaId,
+      'salas'
+    );
+
+    const nuevaSala = await addDoc(
+      referenciaSalas,
+      {
+        nombre,
+        descripcion,
+        categoria: datos.categoria,
+
+        creadorId: usuario.uid,
+        creadorNombre: nombreCompleto,
+
+        activa: true,
+
+        creadoEn: serverTimestamp(),
+        actualizadoEn: serverTimestamp(),
+
+        ultimoMensaje: '',
+        ultimoMensajeAutor: '',
+        ultimoMensajeAutorId: '',
+        ultimoMensajeEn: null,
+
+        mensajesTotales: 0
+      }
+    );
+
+    return {
+      aulaId,
+      salaId: nuevaSala.id
+    };
   }
 }

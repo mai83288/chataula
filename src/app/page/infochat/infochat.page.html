@@ -37,93 +37,149 @@
   </ion-toolbar>
 
 </ion-header>
+
 <ion-content class="info-content">
 
-  @if (salaActual(); as sala) {
+  @if (cargando()) {
 
     <ion-grid class="info-shell">
 
       <ion-row>
 
         <ion-col size="12">
-<!-- 
-          <ion-card class="cover-card">
 
-            <ion-img
-              class="cover-image"
-              [src]="sala.imagen"
-              [alt]="sala.nombre">
-            </ion-img>
+          <ion-note>
+            Cargando información de la sala...
+          </ion-note>
 
-            <ion-card-content class="cover-information">
-
-              <ion-text class="cover-title">
-                {{ sala.nombre }}
-              </ion-text>
-
-              <ion-note class="cover-creator">
-                Creado por {{ sala.creador }}
-              </ion-note>
-
-            </ion-card-content>
-
-          </ion-card>
--->
-          <ion-card class="cover-card">
-
-            <ion-card-content>
-
-              <ion-grid class="cover-grid">
-
-                <ion-row class="cover-row">
-
-                  <ion-col size="auto">
-
-                    <ion-avatar class="cover-icon">
-
-                      <ion-icon name="chatbubbles-outline">
-                      </ion-icon>
-
-                    </ion-avatar>
-
-                  </ion-col>
-
-                  <ion-col>
-
-                    <ion-note class="cover-category">
-                      SALA DE ESTUDIO
-                    </ion-note>
-
-                    <ion-text class="cover-title">
-                      {{ sala.nombre }}
-                    </ion-text>
-
-                    <ion-note class="cover-creator">
-                      Creado por {{ sala.creador }}
-                    </ion-note>
-
-                  </ion-col>
-
-                </ion-row>
-
-              </ion-grid>
-
-            </ion-card-content>
-
-          </ion-card>
         </ion-col>
 
       </ion-row>
+
+    </ion-grid>
+
+  } @else if (error() && !salaActual()) {
+
+    <ion-grid class="info-shell">
 
       <ion-row>
 
         <ion-col size="12">
 
-          <ion-card class="detail-card description-card">
+          <ion-note color="danger">
+            {{ error() }}
+          </ion-note>
+
+        </ion-col>
+
+      </ion-row>
+
+    </ion-grid>
+
+  } @else if (salaActual(); as sala) {
+
+    <ion-grid class="info-shell">
+
+      <!-- Portada -->
+
+      <ion-row>
+
+        <ion-col size="12">
+
+          @if (sala.imagenUrl) {
+
+            <ion-card class="cover-card">
+
+              <ion-img
+                class="cover-image"
+                [src]="sala.imagenUrl"
+                [alt]="sala.nombre">
+              </ion-img>
+
+              <ion-card-content
+                class="cover-information">
+
+                <ion-note class="cover-category">
+                  {{ sala.categoria }}
+                </ion-note>
+
+                <ion-text class="cover-title">
+                  {{ sala.nombre }}
+                </ion-text>
+
+                <ion-note class="cover-creator">
+                  Creado por {{ sala.creadorNombre }}
+                </ion-note>
+
+              </ion-card-content>
+
+            </ion-card>
+
+          } @else {
+
+            <ion-card class="cover-card">
+
+              <ion-card-content>
+
+                <ion-grid class="cover-grid">
+
+                  <ion-row class="cover-row">
+
+                    <ion-col size="auto">
+
+                      <ion-avatar class="cover-icon">
+
+                        <ion-icon
+                          name="chatbubbles-outline">
+                        </ion-icon>
+
+                      </ion-avatar>
+
+                    </ion-col>
+
+                    <ion-col>
+
+                      <ion-note class="cover-category">
+                        {{ sala.categoria }}
+                      </ion-note>
+
+                      <ion-text class="cover-title">
+                        {{ sala.nombre }}
+                      </ion-text>
+
+                      <ion-note class="cover-creator">
+                        Creado por {{ sala.creadorNombre }}
+                      </ion-note>
+
+                    </ion-col>
+
+                  </ion-row>
+
+                </ion-grid>
+
+              </ion-card-content>
+
+            </ion-card>
+
+          }
+
+        </ion-col>
+
+      </ion-row>
+
+      <!-- Descripción -->
+
+      <ion-row>
+
+        <ion-col size="12">
+
+          <ion-card
+            class="detail-card description-card">
 
             <ion-card-content>
 
-              <ion-text class="section-title description-title">
+              <ion-text
+                class="section-title description-title">
 
                 <ion-icon
                   name="information-circle-outline">
@@ -145,17 +201,22 @@
 
       </ion-row>
 
+      <!-- Actividad -->
+
       <ion-row>
 
         <ion-col size="12">
 
-          <ion-card class="detail-card activity-card">
+          <ion-card
+            class="detail-card activity-card">
 
             <ion-card-content>
 
-              <ion-text class="section-title activity-title">
+              <ion-text
+                class="section-title activity-title">
 
-                <ion-icon name="stats-chart-outline">
+                <ion-icon
+                  name="stats-chart-outline">
                 </ion-icon>
 
                 ACTIVIDAD
@@ -181,7 +242,8 @@
 
                   <ion-col>
 
-                    <ion-note class="popularity-label">
+                    <ion-note
+                      class="popularity-label">
                       Popularidad
                     </ion-note>
 
@@ -189,7 +251,8 @@
 
                   <ion-col size="auto">
 
-                    <ion-text class="popularity-value">
+                    <ion-text
+                      class="popularity-value">
                       {{ sala.popularidadTexto }}
                     </ion-text>
 
@@ -207,17 +270,22 @@
 
       </ion-row>
 
+      <!-- Fecha -->
+
       <ion-row>
 
         <ion-col size="12">
 
-          <ion-card class="detail-card date-card">
+          <ion-card
+            class="detail-card date-card">
 
             <ion-card-content>
 
-              <ion-text class="section-title date-title">
+              <ion-text
+                class="section-title date-title">
 
-                <ion-icon name="calendar-outline">
+                <ion-icon
+                  name="calendar-outline">
                 </ion-icon>
 
                 FECHA DE CREACIÓN
@@ -239,6 +307,8 @@
         </ion-col>
 
       </ion-row>
+
+      <!-- Administrador -->
 
       <ion-row>
 
@@ -266,11 +336,11 @@
                   <ion-col>
 
                     <ion-text class="administrator-name">
-                      {{ sala.administrador }}
+                      {{ sala.creadorNombre }}
                     </ion-text>
 
                     <ion-note class="administrator-role">
-                      {{ sala.cargoAdministrador }}
+                      Administrador de la sala
                     </ion-note>
 
                   </ion-col>
@@ -280,6 +350,7 @@
                     <ion-button
                       class="contact-button"
                       type="button"
+                      [disabled]="!sala.creadorCorreo"
                       (click)="contactarAdministrador()">
 
                       <ion-icon
@@ -305,6 +376,63 @@
 
       </ion-row>
 
+      @if (error()) {
+
+        <ion-row>
+
+          <ion-col size="12">
+
+            <ion-note color="danger">
+              {{ error() }}
+            </ion-note>
+
+          </ion-col>
+
+        </ion-row>
+
+      }
+
+      <!-- Eliminar sala -->
+      @if (sala.esCreador) {
+
+        <ion-row>
+
+          <ion-col size="12">
+
+            <ion-button
+              class="delete-room-button"
+              expand="block"
+              fill="outline"
+              color="danger"
+              type="button"
+              [disabled]="eliminando()"
+              (click)="confirmarEliminarSala()">
+
+              <ion-icon
+                slot="start"
+                name="trash-outline">
+              </ion-icon>
+
+              @if (eliminando()) {
+
+                Eliminando sala...
+
+              } @else {
+
+                Eliminar sala
+
+              }
+
+            </ion-button>
+
+          </ion-col>
+
+        </ion-row>
+
+      }
+
+      <!-- Volver -->
+
       <ion-row>
 
         <ion-col size="12">
@@ -322,6 +450,24 @@
             Volver al chat
 
           </ion-button>
+
+        </ion-col>
+
+      </ion-row>
+
+    </ion-grid>
+
+  } @else {
+
+    <ion-grid class="info-shell">
+
+      <ion-row>
+
+        <ion-col size="12">
+
+          <ion-note>
+            {{ mensajeEstado() }}
+          </ion-note>
 
         </ion-col>
 

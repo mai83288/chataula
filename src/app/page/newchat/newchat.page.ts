@@ -1,10 +1,18 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal
+} from '@angular/core';
+
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { Router } from '@angular/router';
+
+import {
+  Router
+} from '@angular/router';
 
 import {
   IonAvatar,
@@ -23,13 +31,17 @@ import {
   IonLabel,
   IonNote,
   IonRow,
+  IonSelect,
+  IonSelectOption,
   IonText,
   IonTextarea,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
 
-import { addIcons } from 'ionicons';
+import {
+  addIcons
+} from 'ionicons';
 
 import {
   addCircleOutline,
@@ -40,10 +52,14 @@ import {
   schoolOutline
 } from 'ionicons/icons';
 
-interface NuevaSala {
-  nombre: string;
-  descripcion: string;
-}
+import {
+  AuthService
+} from '../../core/services/auth.service';
+
+import {
+  CategoriaSala,
+  SalasService
+} from '../../core/services/salas.service';
 
 @Component({
   selector: 'app-newchat',
@@ -68,43 +84,76 @@ interface NuevaSala {
     IonLabel,
     IonNote,
     IonRow,
+    IonSelect,
+    IonSelectOption,
     IonText,
     IonTextarea,
     IonTitle,
     IonToolbar
   ]
 })
-export class NewchatPage implements OnInit {
+export class NewchatPage {
 
-  //constructor() { }
+  private readonly fb =
+    inject(NonNullableFormBuilder);
 
-  ngOnInit() {
-  }
+  private readonly router =
+    inject(Router);
 
+  private readonly salasService =
+    inject(SalasService);
 
-  private readonly fb = inject(NonNullableFormBuilder);
-  private readonly router = inject(Router);
+  private readonly authService =
+    inject(AuthService);
 
-  readonly error = signal<string | null>(null);
+  readonly error =
+    signal<string | null>(null);
+
+  readonly creando =
+    signal(false);
+
+  readonly cerrandoSesion =
+    signal(false);
+
+  readonly categorias:
+    CategoriaSala[] = [
+      'Académicas',
+      'Social',
+      'Urgente'
+    ];
 
   readonly form = this.fb.group({
     nombre: [
       '',
       [
         Validators.required,
-        Validators.minLength(3)
+        Validators.minLength(3),
+        Validators.maxLength(100)
       ]
     ],
+
     descripcion: [
       '',
       [
         Validators.required,
-        Validators.minLength(10)
+        Validators.minLength(10),
+        Validators.maxLength(1000)
       ]
-    ]
+    ],
+
+    categoria:
+      this.fb.control<CategoriaSala>(
+        'Académicas',
+        {
+          validators: [
+            Validators.required
+          ]
+        }
+      )
   });
 
   constructor() {
+
     addIcons({
       addCircleOutline,
       checkmarkDoneCircleOutline,
@@ -116,34 +165,163 @@ export class NewchatPage implements OnInit {
   }
 
   async crearSala(): Promise<void> {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+
+    this.error.set(null);
+    this.form.markAllAsTouched();
+
+    if (
+      this.form.invalid ||
+      this.creando()
+    ) {
       return;
     }
 
-    this.error.set(null);
+    const {
+      nombre,
+      descripcion,
+      categoria
+    } = this.form.getRawValue();
 
-    const nuevaSala: NuevaSala = this.form.getRawValue();
+    if (
+      !nombre.trim() ||
+      !descripcion.trim()
+    ) {
+
+      this.error.set(
+        'El nombre y la descripción no pueden contener solamente espacios.'
+      );
+
+      return;
+    }
+
+    this.creando.set(true);
 
     try {
-      console.log('Sala creada:', nuevaSala);
 
-      this.form.reset();
+      const resultado =
+        await this.salasService.crearSala({
+          nombre,
+          descripcion,
+          categoria
+        });
 
-      await this.router.navigate(['../chats']);
+      this.form.reset({
+        nombre: '',
+        descripcion: '',
+        categoria: 'Académicas'
+      });
+
+      /*
+       * Abre directamente la sala
+       * que acaba de crearse.
+       */
+      await this.router.navigate([
+        '/chats/chatopen',
+        resultado.salaId
+      ]);
 
     } catch (error: unknown) {
-      const mensaje =
-        error instanceof Error
-          ? error.message
-          : 'No fue posible crear la sala';
 
-      this.error.set(mensaje);
+      console.error(
+        'Error al crear la sala:',
+        error
+      );
+
+      this.error.set(
+        this.obtenerMensajeError(error)
+      );
+
+    } finally {
+
+      this.creando.set(false);
     }
   }
 
   async cancelar(): Promise<void> {
-    this.form.reset();
-    await this.router.navigate(['../chats']);
+
+    if (this.creando()) {
+      return;
+    }
+
+    this.form.reset({
+      nombre: '',
+      descripcion: '',
+      categoria: 'Académicas'
+    });
+
+    await this.router.navigateByUrl(
+      '/chats'
+    );
+  }
+
+  async cerrarSesion(): Promise<void> {
+
+    if (
+      this.cerrandoSesion() ||
+      this.creando()
+    ) {
+      return;
+    }
+
+    this.cerrandoSesion.set(true);
+    this.error.set(null);
+
+    try {
+
+      await this.authService.cerrarSesion();
+
+      await this.router.navigateByUrl(
+        '/login',
+        {
+          replaceUrl: true
+        }
+      );
+
+    } catch (error: unknown) {
+
+      console.error(
+        'Error al cerrar sesión:',
+        error
+      );
+
+      this.error.set(
+        'No fue posible cerrar la sesión.'
+      );
+
+    } finally {
+
+      this.cerrandoSesion.set(false);
+    }
+  }
+
+  private obtenerMensajeError(
+    error: unknown
+  ): string {
+
+    const codigo = (
+      error as {
+        code?: string;
+      }
+    )?.code;
+
+    switch (codigo) {
+
+      case 'permission-denied':
+        return 'No tienes permiso para crear salas en esta aula.';
+
+      case 'unavailable':
+        return 'No fue posible conectarse con Firebase.';
+
+      case 'unauthenticated':
+        return 'Debes iniciar sesión nuevamente.';
+
+      default:
+
+        if (error instanceof Error) {
+          return error.message;
+        }
+
+        return 'No fue posible crear la sala.';
+    }
   }
 }

@@ -16,8 +16,14 @@
     <ion-buttons slot="end">
 
       <ion-button
+        type="button"
         fill="clear"
-        aria-label="Cerrar sesión">
+        aria-label="Cerrar sesión"
+        [disabled]="
+          cerrandoSesion() ||
+          creando()
+        "
+        (click)="cerrarSesion()">
 
         <ion-icon
           slot="icon-only"
@@ -105,6 +111,8 @@
 
                 <ion-input
                   formControlName="nombre"
+                  maxlength="100"
+                  autocomplete="off"
                   placeholder="Ej: Álgebra Lineal - Grupo A">
                 </ion-input>
 
@@ -136,6 +144,21 @@
                 </ion-note>
               }
 
+              @if (
+                form.controls.nombre.touched &&
+                form.controls.nombre.hasError('maxlength')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  El nombre no puede superar los 100 caracteres
+
+                </ion-note>
+
+              }
+
               <ion-label class="field-label description-label">
                 DESCRIPCIÓN
               </ion-label>
@@ -150,6 +173,7 @@
 
                 <ion-textarea
                   formControlName="descripcion"
+                  maxlength="1000"
                   placeholder="¿De qué trata este espacio? Añade detalles para tus compañeros..."
                   [autoGrow]="false"
                   [rows]="4">
@@ -181,6 +205,77 @@
                   La descripción debe tener al menos 10 caracteres
 
                 </ion-note>
+              }
+
+              @if (
+                form.controls.descripcion.touched &&
+                form.controls.descripcion.hasError('maxlength')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  La descripción no puede superar los 1000 caracteres
+
+                </ion-note>
+
+              }
+
+              <ion-label class="field-label description-label">
+                CATEGORÍA
+              </ion-label>
+
+              <ion-item
+                class="custom-field"
+                lines="none"
+                [class.input-error]="
+                  form.controls.categoria.invalid &&
+                  form.controls.categoria.touched
+                ">
+
+                <ion-icon
+                  slot="start"
+                  name="school-outline">
+                </ion-icon>
+
+                <ion-select
+                  formControlName="categoria"
+                  interface="action-sheet"
+                  placeholder="Selecciona una categoría"
+                  aria-label="Categoría de la sala">
+
+                  @for (
+                    categoria of categorias;
+                    track categoria
+                  ) {
+
+                    <ion-select-option
+                      [value]="categoria">
+
+                      {{ categoria }}
+
+                    </ion-select-option>
+
+                  }
+
+                </ion-select>
+
+              </ion-item>
+
+              @if (
+                form.controls.categoria.touched &&
+                form.controls.categoria.hasError('required')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Selecciona una categoría
+
+                </ion-note>
+
               }
 
             </form>
@@ -315,14 +410,23 @@
           class="create-button"
           expand="block"
           type="button"
+          [disabled]="creando()"
           (click)="crearSala()">
 
-          <ion-icon
-            slot="start"
-            name="add-circle-outline">
-          </ion-icon>
+          @if (creando()) {
 
-          Crear sala
+            Creando sala...
+
+          } @else {
+
+            <ion-icon
+              slot="start"
+              name="add-circle-outline">
+            </ion-icon>
+
+            Crear sala
+
+          }
 
         </ion-button>
 
@@ -339,6 +443,7 @@
           expand="block"
           fill="outline"
           type="button"
+          [disabled]="creando()"
           (click)="cancelar()">
 
           Cancelar

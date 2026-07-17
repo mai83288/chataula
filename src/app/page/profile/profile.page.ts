@@ -1,11 +1,37 @@
-
 import {
   Component,
+  NgZone,
+  OnDestroy,
+  OnInit,
   inject,
-  signal, OnInit
+  signal
 } from '@angular/core';
 
-import { Router } from '@angular/router';
+import {
+  Router
+} from '@angular/router';
+
+import {
+  Auth
+} from '@angular/fire/auth';
+
+
+import {
+  Firestore
+} from '@angular/fire/firestore';
+
+import {
+  onAuthStateChanged
+} from 'firebase/auth';
+
+import {
+  doc,
+  onSnapshot
+} from 'firebase/firestore';
+
+import {
+  AuthService
+} from '../../core/services/auth.service';
 
 import {
   IonAvatar,
@@ -25,7 +51,9 @@ import {
   IonToolbar
 } from '@ionic/angular/standalone';
 
-import { addIcons } from 'ionicons';
+import {
+  addIcons
+} from 'ionicons';
 
 import {
   checkmarkCircle,
@@ -58,15 +86,34 @@ import {
     IonText,
     IonTitle,
     IonToolbar
-  ]})
-export class ProfilePage implements OnInit {
+  ]
+})
+export class ProfilePage
+  implements OnInit, OnDestroy {
 
-  ngOnInit() {
-  }
+  private readonly router =
+    inject(Router);
 
-  private readonly router = inject(Router);
+  private readonly auth =
+    inject(Auth);
 
-  readonly correo = signal('alumno@correo.com');
+  private readonly firestore =
+    inject(Firestore);
+
+  private readonly zone =
+    inject(NgZone);
+
+  private readonly authService =
+    inject(AuthService);
+
+  private detenerAutenticacion:
+    (() => void) | null = null;
+
+  private detenerPerfil:
+    (() => void) | null = null;
+
+  readonly correo =
+    signal('Cargando...');
 
   readonly seguridad = signal(
     'Sesión iniciada con Firebase Auth'
@@ -76,7 +123,11 @@ export class ProfilePage implements OnInit {
     'Chat Aula v2.4.0 · Academic Ecosystem'
   );
 
+  readonly cerrandoSesion =
+  signal(false);
+
   constructor() {
+
     addIcons({
       checkmarkCircle,
       logOutOutline,
@@ -88,12 +139,154 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  async cerrarSesion(): Promise<void> {
-    /*
-     * Posteriormente aquí se ejecutará el método
-     * del servicio de autenticación.
-     */
+  ngOnInit(): void {
 
-    await this.router.navigate(['/login']);
+    this.detenerAutenticacion =
+      onAuthStateChanged(
+        this.auth,
+
+        usuario => {
+
+          this.detenerPerfil?.();
+          this.detenerPerfil = null;
+
+          if (!usuario) {
+
+            this.zone.run(() => {
+
+              this.correo.set(
+                'Correo no disponible'
+              );
+
+              void this.router.navigateByUrl(
+                '/login',
+                {
+                  replaceUrl: true
+                }
+              );
+            });
+
+            return;
+          }
+
+          const referenciaPerfil = doc(
+            this.firestore,
+            'usuarios',
+            usuario.uid
+          );
+
+          this.detenerPerfil = onSnapshot(
+            referenciaPerfil,
+
+            documentoPerfil => {
+
+              if (!documentoPerfil.exists()) {
+
+                this.zone.run(() => {
+
+                  this.correo.set(
+                    usuario.email ||
+                    'Correo no disponible'
+                  );
+                });
+
+                return;
+              }
+
+              const perfil =
+                documentoPerfil.data();
+
+              const correoFirestore =
+                perfil['correo'];
+
+              const correo =
+                typeof correoFirestore === 'string' &&
+                correoFirestore.trim().length > 0
+                  ? correoFirestore.trim()
+                  : usuario.email ||
+                    'Correo no disponible';
+
+              this.zone.run(() => {
+
+                this.correo.set(
+                  correo
+                );
+              });
+            },
+
+            error => {
+
+              console.error(
+                'Error al cargar el perfil:',
+                error
+              );
+
+              this.zone.run(() => {
+
+                this.correo.set(
+                  usuario.email ||
+                  'Correo no disponible'
+                );
+              });
+            }
+          );
+        },
+
+        error => {
+
+          console.error(
+            'Error al comprobar la sesión:',
+            error
+          );
+
+          this.zone.run(() => {
+
+            this.correo.set(
+              'Correo no disponible'
+            );
+          });
+        }
+      );
+  }
+
+  ngOnDestroy(): void {
+
+    this.detenerPerfil?.();
+    this.detenerPerfil = null;
+
+    this.detenerAutenticacion?.();
+    this.detenerAutenticacion = null;
+  }
+
+  async cerrarSesion(): Promise<void> {
+
+    if (this.cerrandoSesion()) {
+      return;
+    }
+
+    this.cerrandoSesion.set(true);
+
+    try {
+
+      await this.authService.cerrarSesion();
+
+      await this.router.navigateByUrl(
+        '/login',
+        {
+          replaceUrl: true
+        }
+      );
+
+    } catch (error: unknown) {
+
+      console.error(
+        'No fue posible cerrar la sesión:',
+        error
+      );
+
+    } finally {
+
+      this.cerrandoSesion.set(false);
+    }
   }
 }
