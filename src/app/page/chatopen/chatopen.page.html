@@ -11,7 +11,9 @@
 
     </ion-buttons>
 
-    <ion-title class="chat-title" (click)="verInformacionSala()">
+    <ion-title
+      class="chat-title"
+      (click)="verInformacionSala()">
 
       <ion-text class="room-title">
         {{ nombreSala() }}
@@ -21,9 +23,13 @@
 
         <ion-note class="room-status">
 
-          <ion-text class="status-dot">
-            ●
-          </ion-text>
+          @if (salaActiva()) {
+
+            <ion-text class="status-dot">
+              ●
+            </ion-text>
+
+          }
 
           {{ estadoSala() }}
 
@@ -54,90 +60,146 @@
 
   <ion-list class="messages-list">
 
-    @for (
-      mensaje of mensajes();
-      track mensaje.id
-    ) {
+    @if (cargando()) {
 
       <ion-item
         class="message-item"
-        [class.own-message]="mensaje.esMio"
-        [class.other-message]="!mensaje.esMio"
-        [style.--message-accent]="
-          mensaje.colorBorde || 'transparent'
-        "
         lines="none">
 
-        <ion-grid class="message-grid">
-
-          @if (!mensaje.esMio && mensaje.autor) {
-
-            <ion-row>
-
-              <ion-col class="sender-column">
-
-                <ion-text class="sender-name">
-                  {{ mensaje.autor }}
-                </ion-text>
-
-              </ion-col>
-
-            </ion-row>
-
-          }
-
-          <ion-row
-            class="bubble-row"
-            [class.own-bubble-row]="mensaje.esMio">
-
-            <ion-col
-              class="bubble-column"
-              size="auto">
-
-              <ion-card class="message-bubble">
-
-                <ion-card-content>
-
-                  <ion-text>
-                    {{ mensaje.contenido }}
-                  </ion-text>
-
-                </ion-card-content>
-
-              </ion-card>
-
-            </ion-col>
-
-          </ion-row>
-
-          @if (mensaje.hora) {
-
-            <ion-row
-              class="time-row"
-              [class.own-time-row]="mensaje.esMio">
-
-              <ion-col size="auto">
-
-                <ion-note class="message-time">
-                  {{ mensaje.hora }}
-                </ion-note>
-
-              </ion-col>
-
-            </ion-row>
-
-          }
-
-        </ion-grid>
+        <ion-note>
+          Cargando mensajes...
+        </ion-note>
 
       </ion-item>
+
+    } @else if (error()) {
+
+      <ion-item
+        class="message-item"
+        lines="none">
+
+        <ion-note color="danger">
+          {{ error() }}
+        </ion-note>
+
+      </ion-item>
+
+    } @else if (!salaExiste()) {
+
+      <ion-item
+        class="message-item"
+        lines="none">
+
+        <ion-note>
+          La sala no existe o no pertenece a tu aula.
+        </ion-note>
+
+      </ion-item>
+
+    } @else {
+
+      @for (
+        mensaje of mensajes();
+        track mensaje.id
+      ) {
+
+        <ion-item
+          class="message-item"
+          [class.own-message]="mensaje.esMio"
+          [class.other-message]="!mensaje.esMio"
+          [style.--message-accent]="
+            mensaje.colorBorde || 'transparent'
+          "
+          lines="none">
+
+          <ion-grid class="message-grid">
+
+            @if (
+              !mensaje.esMio &&
+              mensaje.autor
+            ) {
+
+              <ion-row>
+
+                <ion-col class="sender-column">
+
+                  <ion-text class="sender-name">
+                    {{ mensaje.autor }}
+                  </ion-text>
+
+                </ion-col>
+
+              </ion-row>
+
+            }
+
+            <ion-row
+              class="bubble-row"
+              [class.own-bubble-row]="
+                mensaje.esMio
+              ">
+
+              <ion-col
+                class="bubble-column"
+                size="auto">
+
+                <ion-card class="message-bubble">
+
+                  <ion-card-content>
+
+                    <ion-text>
+                      {{ mensaje.contenido }}
+                    </ion-text>
+
+                  </ion-card-content>
+
+                </ion-card>
+
+              </ion-col>
+
+            </ion-row>
+
+            @if (mensaje.hora) {
+
+              <ion-row
+                class="time-row"
+                [class.own-time-row]="
+                  mensaje.esMio
+                ">
+
+                <ion-col size="auto">
+
+                  <ion-note class="message-time">
+                    {{ mensaje.hora }}
+                  </ion-note>
+
+                </ion-col>
+
+              </ion-row>
+
+            }
+
+          </ion-grid>
+
+        </ion-item>
+
+      } @empty {
+
+        <ion-item
+          class="message-item"
+          lines="none">
+
+          <ion-note>
+            Aún no hay mensajes. Sé el primero en escribir.
+          </ion-note>
+
+        </ion-item>
+
+      }
 
     }
 
   </ion-list>
-
-  
-  
 
 </ion-content>
 
@@ -155,7 +217,19 @@
 
         <ion-input
           formControlName="texto"
-          aria-label="Escribir mensaje">
+          type="text"
+          inputmode="text"
+          enterkeyhint="send"
+          autocomplete="off"
+          maxlength="2000"
+          placeholder="Escribe un mensaje..."
+          aria-label="Escribir mensaje"
+          [disabled]="
+            cargando() ||
+            enviando() ||
+            !salaExiste() ||
+            !salaActiva()
+          ">
         </ion-input>
 
         <ion-button
@@ -163,7 +237,13 @@
           slot="end"
           type="submit"
           fill="clear"
-          [disabled]="form.invalid">
+          [disabled]="
+            form.invalid ||
+            enviando() ||
+            cargando() ||
+            !salaExiste() ||
+            !salaActiva()
+          ">
 
           <ion-icon
             slot="icon-only"

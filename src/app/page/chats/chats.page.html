@@ -26,7 +26,7 @@
           </ion-text>
 
           <ion-note class="header-email">
-            alumno@correo.com
+            {{ correo() }}
           </ion-note>
 
         </ion-col>
@@ -35,9 +35,11 @@
 
           <ion-button
             class="logout-button"
+            type="button"
             fill="clear"
-            aria-label="Cerrar sesión">
-            
+            aria-label="Cerrar sesión"
+            [disabled]="cerrandoSesion()"
+            (click)="cerrarSesion()">
 
             <ion-icon
               slot="icon-only"
@@ -84,7 +86,10 @@
 
       <ion-col size="12">
 
-        @for (filtro of filtros(); track filtro) {
+        @for (
+          filtro of filtros();
+          track filtro
+        ) {
 
           <ion-chip
             class="filter-chip"
@@ -105,7 +110,7 @@
 
     </ion-row>
 
-    <!-- Lista de chats -->
+    <!-- Lista de salas -->
 
     <ion-row>
 
@@ -113,101 +118,134 @@
 
         <ion-list class="rooms-list">
 
-          @for (
-            chat of chatsFiltrados();
-            track chat.id;
-            let indice = $index
-          ) {
-
-            <ion-card
-              class="room-card"
-              button
-              [style.--room-color]="chat.color"
-              (click)="abrirChat(chat.id)">
-
-              <ion-item lines="none">
-
-                <ion-avatar
-                  slot="start"
-                  class="room-icon"
-                  [style.--room-icon-background]="
-                    chat.fondoIcono
-                  ">
-
-                  <ion-icon
-                    [name]="chat.icono"
-                    [style.color]="chat.color">
-                  </ion-icon>
-
-                </ion-avatar>
-
-                <ion-label>
-
-                  <ion-text class="room-name">
-                    {{ chat.nombre }}
-                  </ion-text>
-
-                  <ion-note class="room-message">
-                    {{ chat.mensaje }}
-                  </ion-note>
-
-                </ion-label>
-
-                <ion-grid
-                  slot="end"
-                  class="room-meta">
-
-                  <ion-row>
-
-                    <ion-col>
-
-                      <ion-note
-                        class="room-time"
-                        [class.unread-time]="
-                          chat.mensajesNoLeidos > 0
-                        ">
-
-                        {{ chat.hora }}
-
-                      </ion-note>
-
-                    </ion-col>
-
-                  </ion-row>
-
-                  @if (chat.mensajesNoLeidos > 0) {
-
-                    <ion-row>
-
-                      <ion-col>
-
-                        <ion-badge class="unread-badge">
-                          {{ chat.mensajesNoLeidos }}
-                        </ion-badge>
-
-                      </ion-col>
-
-                    </ion-row>
-
-                  }
-
-                </ion-grid>
-
-              </ion-item>
-
-            </ion-card>
-
-          } @empty {
+          @if (cargando()) {
 
             <ion-item
               class="empty-chat"
               lines="none">
 
               <ion-label>
-                No se encontraron salas
+                Cargando salas...
               </ion-label>
 
             </ion-item>
+
+          } @else if (errorCarga()) {
+
+            <ion-item
+              class="empty-chat"
+              lines="none">
+
+              <ion-label color="danger">
+                {{ errorCarga() }}
+              </ion-label>
+
+            </ion-item>
+
+          } @else {
+
+            @for (
+              chat of chatsFiltrados();
+              track chat.id
+            ) {
+
+              <ion-card
+                class="room-card"
+                button
+                [style.--room-color]="chat.color"
+                (click)="abrirChat(chat.id)">
+
+                <ion-item lines="none">
+
+                  <ion-avatar
+                    slot="start"
+                    class="room-icon"
+                    [style.--room-icon-background]="
+                      chat.fondoIcono
+                    ">
+
+                    <ion-icon
+                      [name]="chat.icono"
+                      [style.color]="chat.color">
+                    </ion-icon>
+
+                  </ion-avatar>
+
+                  <ion-label>
+
+                    <ion-text class="room-name">
+                      {{ chat.nombre }}
+                    </ion-text>
+
+                    <ion-note class="room-message">
+                      {{ chat.mensaje }}
+                    </ion-note>
+
+                  </ion-label>
+
+                  <ion-grid
+                    slot="end"
+                    class="room-meta">
+
+                    @if (chat.hora) {
+
+                      <ion-row>
+
+                        <ion-col>
+
+                          <ion-note
+                            class="room-time"
+                            [class.unread-time]="
+                              chat.mensajesNoLeidos > 0
+                            ">
+
+                            {{ chat.hora }}
+
+                          </ion-note>
+
+                        </ion-col>
+
+                      </ion-row>
+
+                    }
+
+                    @if (
+                      chat.mensajesNoLeidos > 0
+                    ) {
+
+                      <ion-row>
+
+                        <ion-col>
+
+                          <ion-badge class="unread-badge">
+                            {{ chat.mensajesNoLeidos }}
+                          </ion-badge>
+
+                        </ion-col>
+
+                      </ion-row>
+
+                    }
+
+                  </ion-grid>
+
+                </ion-item>
+
+              </ion-card>
+
+            } @empty {
+
+              <ion-item
+                class="empty-chat"
+                lines="none">
+
+                <ion-label>
+                  Aún no estás en ninguna sala
+                </ion-label>
+
+              </ion-item>
+
+            }
 
           }
 
@@ -219,24 +257,24 @@
 
   </ion-grid>
 
-  <!-- Botón para crear sala -->
+  @if (aulaActualId()) {
 
- 
+    <ion-fab
+      vertical="bottom"
+      horizontal="end"
+      slot="fixed">
+
+      <ion-fab-button
+        aria-label="Crear sala"
+        routerLink="/chats/newchat">
+
+        <ion-icon name="add-outline">
+        </ion-icon>
+
+      </ion-fab-button>
+
+    </ion-fab>
+
+  }
 
 </ion-content>
-
- <ion-fab
-    vertical="bottom"
-    horizontal="end"
-    slot="fixed">
-
-    <ion-fab-button
-      aria-label="Crear sala"
-      routerLink="/chats/newchat">
-
-      <ion-icon name="add-outline">
-      </ion-icon>
-
-    </ion-fab-button>
-
-  </ion-fab>
