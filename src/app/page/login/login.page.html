@@ -135,6 +135,7 @@
                       type="button"
                       fill="clear"
                       size="small"
+                      [disabled]="cargando()"
                       (click)="irRecuperarPassword()">
 
                       ¿Olvidaste tu contraseña?
@@ -230,14 +231,23 @@
                 <ion-button
                   class="login-button"
                   expand="block"
-                  type="submit">
+                  type="submit"
+                  [disabled]="cargando()">
 
-                  Iniciar sesión
+                  @if (cargando()) {
 
-                  <ion-icon
-                    slot="end"
-                    name="arrow-forward-outline">
-                  </ion-icon>
+                    Iniciando sesión...
+
+                  } @else {
+
+                    Iniciar sesión
+
+                    <ion-icon
+                      slot="end"
+                      name="arrow-forward-outline">
+                    </ion-icon>
+
+                  }
 
                 </ion-button>
 
@@ -253,6 +263,7 @@
                   type="button"
                   fill="clear"
                   expand="block"
+                  [disabled]="cargando()"
                   (click)="irRegistro()">
 
                   Crear cuenta

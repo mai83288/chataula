@@ -1,11 +1,18 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal
+} from '@angular/core';
+
 import {
   AbstractControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   ValidationErrors,
+  ValidatorFn,
   Validators
 } from '@angular/forms';
+
 import { Router } from '@angular/router';
 
 import {
@@ -36,9 +43,35 @@ import {
   logoGoogle,
   logoWindows,
   mailOutline,
+  personOutline,
   school,
   shieldCheckmarkOutline
 } from 'ionicons/icons';
+
+import {
+  AuthService
+} from '../../core/services/auth.service';
+
+const passwordsIgualesValidator: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
+
+  const password =
+    control.get('password')?.value;
+
+  const confirmarPassword =
+    control.get('confirmarPassword')?.value;
+
+  if (!password || !confirmarPassword) {
+    return null;
+  }
+
+  return password === confirmarPassword
+    ? null
+    : {
+        passwordsDiferentes: true
+      };
+};
 
 @Component({
   selector: 'app-register',
@@ -66,15 +99,43 @@ import {
     IonText
   ]
 })
-export class RegisterPage  {
+export class RegisterPage {
 
-  private readonly fb = inject(NonNullableFormBuilder);
-  private readonly router = inject(Router);
+  private readonly fb =
+    inject(NonNullableFormBuilder);
 
-  readonly error = signal<string | null>(null);
+  private readonly router =
+    inject(Router);
+
+  private readonly authService =
+    inject(AuthService);
+
+  readonly error =
+    signal<string | null>(null);
+
+  readonly cargando =
+    signal(false);
 
   readonly form = this.fb.group(
     {
+      nombre: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]
+      ],
+
+      apellidos: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(80)
+        ]
+      ],
+
       correo: [
         '',
         [
@@ -82,6 +143,7 @@ export class RegisterPage  {
           Validators.email
         ]
       ],
+
       password: [
         '',
         [
@@ -89,6 +151,7 @@ export class RegisterPage  {
           Validators.minLength(8)
         ]
       ],
+
       confirmarPassword: [
         '',
         [
@@ -97,7 +160,7 @@ export class RegisterPage  {
       ]
     },
     {
-      validators: this.passwordsIguales
+      validators: passwordsIgualesValidator
     }
   );
 
@@ -108,68 +171,76 @@ export class RegisterPage  {
       logoGoogle,
       logoWindows,
       mailOutline,
+      personOutline,
       school,
       shieldCheckmarkOutline
     });
   }
-  
-
-  private passwordsIguales(
-    control: AbstractControl
-  ): ValidationErrors | null {
-
-    const password = control.get('password')?.value;
-    const confirmarPassword =
-      control.get('confirmarPassword')?.value;
-
-    return password === confirmarPassword
-      ? null
-      : { passwordsDiferentes: true };
-  }
 
   async registrar(): Promise<void> {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+
+    this.error.set(null);
+    this.form.markAllAsTouched();
+
+    if (
+      this.form.invalid ||
+      this.cargando()
+    ) {
       return;
     }
 
-    this.error.set(null);
+    this.cargando.set(true);
 
     const {
+      nombre,
+      apellidos,
       correo,
       password
     } = this.form.getRawValue();
 
     try {
-      console.log('Registro simulado:', {
+
+      await this.authService.registrar({
+        nombre,
+        apellidos,
         correo,
         password
       });
 
       this.form.reset();
 
-      await this.router.navigate(['/chats']);
+      await this.router.navigateByUrl(
+        '/chats',
+        {
+          replaceUrl: true
+        }
+      );
 
     } catch (error: unknown) {
-      const mensaje =
-        error instanceof Error
-          ? error.message
-          : 'Error de conexión con el servidor';
 
-      this.error.set(mensaje);
+      this.error.set(
+        this.authService.obtenerMensajeError(error)
+      );
+
+    } finally {
+
+      this.cargando.set(false);
     }
   }
 
-  async registrarGoogle(): Promise<void> {
-    console.log('Registro con Google');
+  registrarGoogle(): void {
+    this.error.set(
+      'El registro con Google todavía no está disponible.'
+    );
   }
 
-  async registrarMicrosoft(): Promise<void> {
-    console.log('Registro con Microsoft');
+  registrarMicrosoft(): void {
+    this.error.set(
+      'El registro con Microsoft todavía no está disponible.'
+    );
   }
 
   async irInicioSesion(): Promise<void> {
-    await this.router.navigate(['/login']);
+    await this.router.navigateByUrl('/login');
   }
-  
 }

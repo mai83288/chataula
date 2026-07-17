@@ -1,10 +1,15 @@
+import {
+  Component,
+  inject,
+  signal
+} from '@angular/core';
 
-import { Component, inject, signal } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+
 import { Router } from '@angular/router';
 
 import {
@@ -20,12 +25,12 @@ import {
   IonGrid,
   IonIcon,
   IonInput,
+  IonItem,
   IonItemDivider,
   IonLabel,
   IonNote,
   IonRow,
-  IonText,
-  IonItem
+  IonText
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -42,6 +47,10 @@ import {
   shieldCheckmarkOutline
 } from 'ionicons/icons';
 
+import {
+  AuthService
+} from '../../core/services/auth.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -57,25 +66,37 @@ import {
     IonCardSubtitle,
     IonCardTitle,
     IonCol,
-    IonItem,
     IonContent,
     IonGrid,
     IonIcon,
     IonInput,
+    IonItem,
     IonItemDivider,
     IonLabel,
     IonNote,
     IonRow,
     IonText
-  ]})
-
+  ]
+})
 export class LoginPage {
 
-  private readonly fb = inject(NonNullableFormBuilder);
-  private readonly router = inject(Router);
+  private readonly fb =
+    inject(NonNullableFormBuilder);
 
-  readonly error = signal<string | null>(null);
-  readonly mostrarPassword = signal(false);
+  private readonly router =
+    inject(Router);
+
+  private readonly authService =
+    inject(AuthService);
+
+  readonly error =
+    signal<string | null>(null);
+
+  readonly mostrarPassword =
+    signal(false);
+
+  readonly cargando =
+    signal(false);
 
   readonly form = this.fb.group({
     correo: [
@@ -85,6 +106,7 @@ export class LoginPage {
         Validators.email
       ]
     ],
+
     password: [
       '',
       [
@@ -109,46 +131,65 @@ export class LoginPage {
   }
 
   alternarPassword(): void {
-    this.mostrarPassword.update(valor => !valor);
+    this.mostrarPassword.update(
+      valor => !valor
+    );
   }
 
   async iniciarS(): Promise<void> {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+
+    this.error.set(null);
+    this.form.markAllAsTouched();
+
+    if (
+      this.form.invalid ||
+      this.cargando()
+    ) {
       return;
     }
 
-    this.error.set(null);
+    this.cargando.set(true);
 
-    const { correo, password } = this.form.getRawValue();
+    const {
+      correo,
+      password
+    } = this.form.getRawValue();
 
     try {
-      /*
-       * Aquí se conectará posteriormente el servicio:
-       *
-       * const usuario = await this.authService.loginUsuario(
-       *   correo,
-       *   password
-       * );
-       */
 
-      await this.router.navigate(['/chats']);
+      await this.authService.iniciarSesion(
+        correo,
+        password
+      );
 
       this.form.reset();
-    } catch (error: unknown) {
-      const mensaje = error instanceof Error
-        ? error.message
-        : 'Error de conexión con el servidor';
 
-      this.error.set(mensaje);
+      await this.router.navigateByUrl(
+        '/chats',
+        {
+          replaceUrl: true
+        }
+      );
+
+    } catch (error: unknown) {
+
+      this.error.set(
+        this.authService.obtenerMensajeError(error)
+      );
+
+    } finally {
+
+      this.cargando.set(false);
     }
   }
 
   async irRegistro(): Promise<void> {
-    await this.router.navigate(['/register']);
+    await this.router.navigateByUrl('/register');
   }
 
   async irRecuperarPassword(): Promise<void> {
-    await this.router.navigate(['/forgot-password']);
+    await this.router.navigateByUrl(
+      '/forgot-password'
+    );
   }
 }

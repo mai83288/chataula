@@ -1,6 +1,4 @@
-<ion-content
-  class="register-content"
-  >
+<ion-content class="register-content">
 
   <ion-grid class="register-shell">
 
@@ -47,8 +45,156 @@
               [formGroup]="form"
               (ngSubmit)="registrar()">
 
+              <!-- Nombre -->
+
               <ion-label class="field-label">
-                Email
+                Nombre
+              </ion-label>
+
+              <ion-item
+                class="custom-field"
+                lines="none"
+                [class.input-error]="
+                  form.controls.nombre.invalid &&
+                  form.controls.nombre.touched
+                ">
+
+                <ion-icon
+                  slot="start"
+                  name="person-outline">
+                </ion-icon>
+
+                <ion-input
+                  type="text"
+                  autocomplete="given-name"
+                  placeholder="Ingresa tu nombre"
+                  formControlName="nombre">
+                </ion-input>
+
+              </ion-item>
+
+              @if (
+                form.controls.nombre.touched &&
+                form.controls.nombre.hasError('required')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Ingresa tu nombre
+
+                </ion-note>
+
+              }
+
+              @if (
+                form.controls.nombre.touched &&
+                form.controls.nombre.hasError('minlength')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  El nombre debe tener al menos 2 caracteres
+
+                </ion-note>
+
+              }
+
+              @if (
+                form.controls.nombre.touched &&
+                form.controls.nombre.hasError('maxlength')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  El nombre no puede superar los 50 caracteres
+
+                </ion-note>
+
+              }
+
+              <!-- Apellidos -->
+
+              <ion-label class="field-label password-label">
+                Apellidos
+              </ion-label>
+
+              <ion-item
+                class="custom-field"
+                lines="none"
+                [class.input-error]="
+                  form.controls.apellidos.invalid &&
+                  form.controls.apellidos.touched
+                ">
+
+                <ion-icon
+                  slot="start"
+                  name="person-outline">
+                </ion-icon>
+
+                <ion-input
+                  type="text"
+                  autocomplete="family-name"
+                  placeholder="Ingresa tus apellidos"
+                  formControlName="apellidos">
+                </ion-input>
+
+              </ion-item>
+
+              @if (
+                form.controls.apellidos.touched &&
+                form.controls.apellidos.hasError('required')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Ingresa tus apellidos
+
+                </ion-note>
+
+              }
+
+              @if (
+                form.controls.apellidos.touched &&
+                form.controls.apellidos.hasError('minlength')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Los apellidos deben tener al menos 2 caracteres
+
+                </ion-note>
+
+              }
+
+              @if (
+                form.controls.apellidos.touched &&
+                form.controls.apellidos.hasError('maxlength')
+              ) {
+
+                <ion-note
+                  class="validation-note"
+                  color="danger">
+
+                  Los apellidos no pueden superar los 80 caracteres
+
+                </ion-note>
+
+              }
+
+              <!-- Correo -->
+
+              <ion-label class="field-label password-label">
+                Correo electrónico
               </ion-label>
 
               <ion-item
@@ -103,6 +249,8 @@
                 </ion-note>
 
               }
+
+              <!-- Contraseña -->
 
               <ion-label class="field-label password-label">
                 Contraseña
@@ -159,6 +307,8 @@
                 </ion-note>
 
               }
+
+              <!-- Confirmar contraseña -->
 
               <ion-label class="field-label password-label">
                 Confirmar contraseña
@@ -219,6 +369,8 @@
 
               }
 
+              <!-- Error de Firebase -->
+
               @if (error()) {
 
                 <ion-note
@@ -231,19 +383,35 @@
 
               }
 
+              <!-- Registrar -->
+
               <ion-button
                 class="register-button"
                 expand="block"
-                type="submit">
+                type="submit"
+                [disabled]="
+                  form.invalid ||
+                  cargando()
+                ">
 
-                Registrarme
+                @if (cargando()) {
 
-                <ion-icon
-                  slot="end"
-                  name="arrow-forward-outline">
-                </ion-icon>
+                  Creando cuenta...
+
+                } @else {
+
+                  Registrarme
+
+                  <ion-icon
+                    slot="end"
+                    name="arrow-forward-outline">
+                  </ion-icon>
+
+                }
 
               </ion-button>
+
+              <!-- Registro social -->
 
               <ion-row class="social-divider-row">
 
@@ -280,6 +448,7 @@
                     expand="block"
                     fill="outline"
                     type="button"
+                    [disabled]="cargando()"
                     (click)="registrarGoogle()">
 
                     <ion-icon
@@ -300,6 +469,7 @@
                     expand="block"
                     fill="outline"
                     type="button"
+                    [disabled]="cargando()"
                     (click)="registrarMicrosoft()">
 
                     <ion-icon
@@ -330,13 +500,14 @@
       <ion-col size="12">
 
         <ion-text class="login-question">
-          ¿Ya tengo cuenta?
+          ¿Ya tienes una cuenta?
         </ion-text>
 
         <ion-button
           class="login-link"
           type="button"
           fill="clear"
+          [disabled]="cargando()"
           (click)="irInicioSesion()">
 
           Ya tengo cuenta

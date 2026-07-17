@@ -1,7 +1,7 @@
 import { Component, OnInit,  computed,  inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonToolbar } from '@ionic/angular/standalone';
 import { Router, RouterLink } from '@angular/router';
 import { SearchbarInputEventDetail } from '@ionic/core';
 import {
@@ -9,12 +9,10 @@ import {
   IonBadge,
   IonButton,
   IonCard,
-  
   IonChip,
   IonCol,
   IonFab,
   IonFabButton,
-  IonFooter,
   IonGrid,
   IonIcon,
   IonItem,
@@ -23,8 +21,6 @@ import {
   IonNote,
   IonRow,
   IonSearchbar,
-  IonTabBar,
-  IonTabButton,
   IonText
 } from '@ionic/angular/standalone';
 
@@ -63,7 +59,7 @@ interface Chat {
   templateUrl: './chats.page.html',
   styleUrls: ['./chats.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,  IonAvatar,
+  imports: [IonContent, IonHeader, IonToolbar, CommonModule, FormsModule,  IonAvatar,
   IonBadge,
   IonButton,
   IonCard,
@@ -71,7 +67,6 @@ interface Chat {
   IonCol,
   IonFab,
   IonFabButton,
-  IonFooter,
   IonGrid,
   IonIcon,
   IonItem,
@@ -80,8 +75,7 @@ interface Chat {
   IonNote,
   IonRow,
   IonSearchbar,
-  IonTabBar,
-  IonTabButton,RouterLink,
+  RouterLink,
 
   IonText]
 })
