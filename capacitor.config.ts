@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'chataula',
+  appId: 'com.chataula.chataula',
+  appName: 'Chat Aula',
   webDir: 'www'
 };
 
